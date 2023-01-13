@@ -203,7 +203,7 @@ if [[ $1 != "1" ]]; then
     #validacion de existencias de .zsh y .oh-my-zsh
     if ! [[ -f "$HOME/.zshrc" || -d "$HOME/.oh-my-zsh" ]]; then
         #unicamente se ejecutara en root ("cambio de permisos de seguridad")
-        sh $PWD/aws_ec2cli.sh
+        sh $PWD/zshPowerline.sh
     else
         printf "${Green} The${Cyan} .zsh ${Green}was already exists ${NC}\n"
     fi
