@@ -1,5 +1,6 @@
 # Inicializacion 
-- Un instalador general para configuración de entornos, configuración de servidores o ejecución
+
+Un instalador general para configuración de entornos, configuración de servidores o ejecución
 de scripts para la automatización de ciertas tareas.
 
 enviar el contenido a la Cloud Vm via Github

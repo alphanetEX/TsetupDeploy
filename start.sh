@@ -108,7 +108,7 @@ PasswordHider() {
 
 CheckPasswdChain(){
     passwx=$1
-    result=$(echo "$passwx" | cracklib-check | sed -r 's/[a-z]+:\ //')
+    result=$(echo "$passwx" | cracklib-check | sed -r 's/.*\:\ ([A-Z]+)/\1/')
     if [[ $result != "OK" ]]; then
     printf "${Cyan}Password with low special characters \n ${NC}"
     PasswordHider "ingress your new password:"
@@ -246,7 +246,7 @@ if [[ $1 != "1" ]]; then
         echo -e "\n"
         case $opcion in 
             1)
-            Verify_Kernel_Conf
+            VerifyKernelConf
             sleep 3
             Menu
             ;;
