@@ -19,9 +19,9 @@ Cyan='\033[0;36m'
 NC='\033[0m'
 
 
-Global_sw_hw_conf(){
+GlobalSwHwConf(){
     #tipo de procesador             
-    kernel_data[0]=$(uname -p)
+    kernel_data[0]=$(lscpu | sed -n 1p | sed -r 's/.*\ +(\w+).*/\1/')
     #tipo de sistema operativo 
     kernel_data[1]=$(uname -s)
     #version completa del kernel 
@@ -47,16 +47,16 @@ Global_sw_hw_conf(){
 
 
 # Seccion de validacion para la carga de dependencia tanto como de una SBC o Cloud 
-Verify_Kernel_Conf(){
-    #tipo de procesador             
-    kernel_data[0]=$(uname -p)
+VerifyKernelConf(){
+    #tipo de procesador      
+    kernel_data[0]=$(lscpu | sed -n 1p | sed -r 's/.*\ +(\w+).*/\1/')
     #tipo de sistema operativo 
     kernel_data[1]=$(uname -s)  
 
 if [[ ${kernel_data[0]} == "x86_64" && ${kernel_data[1]} == "Linux" ]]; then
     printf "${Cyan} This is a AMD/INTEL X86-64 device ${NC} \n"
     
-    Global_sw_hw_conf
+    GlobalSwHwConf
 
 elif [[ ${kernel_data[0]} == "aarch64" && ${kernel_data[1]} == "Linux" ]]; then
 
@@ -67,14 +67,14 @@ elif [[ ${kernel_data[0]} == "aarch64" && ${kernel_data[1]} == "Linux" ]]; then
     #version de las librerias de L4T(linux for tegra)
     tegra_version[2]="${tegra_version[0]}.${tegra_version[1]}"
 
-    Global_sw_hw_conf
+    GlobalSwHwConf
 
     if [[ -f "/etc/nv_tegra_release" ]]; then
     printf "${Blue} Library of jetson L4T:  ${Green} ${tegra_version[2]}${NC} \n"
     fi
 #si en caso no es detectado el tipo de procesador
 elif [[ ${kernel_data[0]} == "unknown" || ${kernel_data[1]} == "Linux" ]]; then
-    Global_sw_hw_conf
+    GlobalSwHwConf
     printf "${Red}Warning the CPU architecture was'nt recognized its possible of any building not works ${NC} \n"
 else 
     printf "${Red}Warning this Operative System was not contenplated on this automatization ${NC} \n"
@@ -85,7 +85,7 @@ else
 fi
 }
 
-Password_Hider() {
+PasswordHider() {
     echo -n "$1"
     password=""
     while IFS= read -r -n1 -s char; do
@@ -103,39 +103,62 @@ Password_Hider() {
     ;;
     esac
     done
-    echo 
+    echo -ne "\n"
 }
 
-Check_Passwd_Chain(){
+CheckPasswdChain(){
     passwx=$1
     result=$(echo "$passwx" | cracklib-check | sed -r 's/[a-z]+:\ //')
     if [[ $result != "OK" ]]; then
     printf "${Cyan}Password with low special characters \n ${NC}"
-    Password_Hider "ingress your new password:"
+    PasswordHider "ingress your new password:"
     passwx=$password
-    Check_Passwd_Chain $passwx
+    CheckPasswdChain $passwx
     fi
 }
 
 
-Val_passwd(){
-
-pwx_0=$1
-pwx_1=$2
-
-if [[ $pwx_0 != $pwx_1  ]]; then
-printf "${Red}Passwords do not match \n${NC}"
-Password_Hider "ingress your new password:" 
-pwx_0=$password
-Check_Passwd_Chain $pwx_0
-Password_Hider "repeat the new password:"  
-pwx_1=$password
-
-Val_passwd $pwx_0 $pwx_1
-fi 
+#validator for empty spaces of passwords
+notEmptyPwx(){
+    text=$1
+    result=$2
+    if [[ -z $result ]]; then 
+    PasswordHider "$text"
+    pwx_0=$password
+    notEmptyPwx "$text" $pwx_0
+    fi 
 }
 
-Zsh_Customs(){
+
+#validator for empty spaces of read -p 
+notEmpty() {
+    text=$1
+    variable=$2
+    if [[ -z $variable ]]; then 
+    read -p "$text" variable
+    notEmpty "$text" $variable    
+    else
+        echo "$variable"
+    fi  
+}
+
+valPasswd(){
+    pwx_0=$1
+    pwx_1=$2
+
+    if [[ $pwx_0 != $pwx_1  ]]; then
+    printf "${Red}Passwords do not match \n${NC}"
+    PasswordHider "ingress your new password:" 
+    pwx_0=$password
+    CheckPasswdChain $pwx_0
+    PasswordHider "repeat the new password:"  
+    pwx_1=$password
+
+    valPasswd $pwx_0 $pwx_1
+    fi 
+}
+
+ZshCustoms(){
     user=$1
     directory=$2
 
@@ -161,39 +184,34 @@ Zsh_Customs(){
 }
 
 
-Create_User(){
+CreateUser(){
+    #Generacion de Usuarios 
+    read -p "User: " user
+    PasswordHider "ingress your new password:"
+    pwx_0=$password
+    CheckPasswdChain $pwx_0
+    PasswordHider "repeat the new password:"
+    pwx_1=$password
+    valPasswd $pwx_0 $pwx_1
+    validate=$pwx_1
+    directory="/home/$user/"
 
-#Generacion de Usuarios 
-read -p "User: " user
-Password_Hider "ingress your new password:"
-pwx_0=$password
-Check_security $pwx_0
-Password_Hider "repeat the new password:"
-pwx_1=$password
+    data="$validate
+    $validate
+    #\n
+    #\n
+    #\n
+    #\n
+    #\n
+    Y
+    " 
+    sudo -S sed -e 's/\s*\([\+0-9a-zA-Z]*\).*/\1/' <<< $data | adduser $user >> general.log 
+    usermod -aG sudo $user
 
-Val_passwd $pwx_0 $pwx_1
-
-validate=$pwx_1
-directory="/home/$user/"
-
-data="$validate
-$validate
-#\n
-#\n
-#\n
-#\n
-#\n
- Y
-" 
-sudo -S sed -e 's/\s*\([\+0-9a-zA-Z]*\).*/\1/' <<< $data | adduser $user >> results.log 
-usermod -aG sudo $user
-
-Zsh_Customs $user $directory
-
-read -p "Desea crear otro usuario y/n?: " confirm
-if [[ $confirm == "y" || $confirm == "Y" ]]; then
-    Create_User
-fi
+    read -p "Desea crear otro usuario y/n?: " confirm
+    if [[ $confirm == "y" || $confirm == "Y" ]]; then
+        CreateUser
+    fi
 
 }
 
@@ -218,6 +236,7 @@ if [[ $1 != "1" ]]; then
         echo "1. Ver caracteristicas de hardware: "
         echo "2. Instalacion de Zsh + Powerline + Powerlevel9K "
         echo "3. Entorno de BACK Node"
+        echo "4. Creacion de usuarios (LINUX)"
 
         #capture data
         
@@ -241,6 +260,15 @@ if [[ $1 != "1" ]]; then
             sh $PWD/StackConstructor.sh
             Menu 
             ;;
+            4)
+            PrinterLog 2 "Creacion de Usuarios" "Warning"
+            CreateUser
+            read -p " Desea agregar las caracteristicas de .zshrc a un usuario existente (y/n)?: " confirm
+            if [[ $confirm == "y" || $confirm == "Y" ]]; then 
+                read -p "User: " user
+                directory="/home/$user/"
+                ZshCustoms $user $directory
+            fi
             0) echo "Salir"
             exit 0         #saliendose de la aplicacion
             ;;
