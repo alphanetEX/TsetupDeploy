@@ -10,6 +10,7 @@ unset kernel_data[6]
 unset tegra_version[3]
 unset cpu_verstion
 unset confirm
+source generalPrint.sh
 
 Green='\033[0;32m'
 Red='\033[0;31m'
@@ -199,26 +200,47 @@ fi
 main(){
 #Caracteristicas del Sistema operativo
 if [[ $1 != "1" ]]; then 
-    Verify_Kernel_Conf    
+       
     #validacion de existencias de .zsh y .oh-my-zsh
-    if ! [[ -f "$HOME/.zshrc" || -d "$HOME/.oh-my-zsh" ]]; then
-        #unicamente se ejecutara en root ("cambio de permisos de seguridad")
-        sh $PWD/zshPowerline.sh
-    else
-        printf "${Green} The${Cyan} .zsh ${Green}was already exists ${NC}\n"
-    fi
+    opcion=0
+    while : #: ecuals to true
+    do 
+        #limpiar la pantalla 
+        clear 
+        #deplegar el menu de opciones
+        echo "--------------------------------------------"
+        echo "         GENERAL DEVELOPMENT CONFIG         "
+        echo "--------------------------------------------"
+        echo "              MENU PRINCIPAL                "
+        echo "--------------------------------------------"
 
-    #Creacion de usuarios
-    read -p " Desea crear usuarios adicionales (y/n)?: " confirm
-    if [[ $confirm == "y" || $confirm == "Y" ]]; then Create_User ;fi
+        echo "0. Salir"
+        echo "1. Ver caracteristicas de hardware: "
+        echo "1. Instalacion de Zsh + Powerline + Powerlevel9K "
+        echo "2. Formateo de discos"
 
-    read -p " Desea agregar las caracteristicas de .zshrc a un usuario existente (y/n)?: " confirm
-    if [[ $confirm == "y" || $confirm == "Y" ]]; then 
-        read -p "User: " user
-        directory="/home/$user/"
-        Zsh_Customs $user $directory
-    fi
-
+        #capture data
+        
+        read -n1 -p "ingrese una opcion [1-5]: " opcion 
+        
+        #validar la opcion ingresada 
+        echo -e "\n"
+        case $opcion in 
+            1)
+            Verify_Kernel_Conf
+            sleep 3
+            Menu
+            ;;
+            2) 
+            PrinterLog 0 "Ejecutando zshPowerline.sh" "Instalando Zsh+Powerline"
+            sh $PWD/awsPowerline.sh
+            Menu 
+            ;;
+            0) echo "Salir"
+            exit 0         #saliendose de la aplicacion
+            ;;
+        esac 
+    done
 fi
 #terminar este bloque de ejecucion 
 }
