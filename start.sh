@@ -217,7 +217,7 @@ if [[ $1 != "1" ]]; then
         echo "0. Salir"
         echo "1. Ver caracteristicas de hardware: "
         echo "2. Instalacion de Zsh + Powerline + Powerlevel9K "
-        echo "3. Formateo de discos"
+        echo "3. Entorno de BACK Node"
 
         #capture data
         
@@ -234,6 +234,11 @@ if [[ $1 != "1" ]]; then
             2) 
             PrinterLog 0 "Ejecutando zshPowerline.sh" "Instalando Zsh+Powerline"
             sh $PWD/zshPowerline.sh
+            Menu 
+            ;;
+            3) 
+            PrinterLog 0 "Ejecutando StackConstructor.sh" "preparando entorno Back de NodeJs"
+            sh $PWD/StackConstructor.sh
             Menu 
             ;;
             0) echo "Salir"
