@@ -216,8 +216,8 @@ if [[ $1 != "1" ]]; then
 
         echo "0. Salir"
         echo "1. Ver caracteristicas de hardware: "
-        echo "1. Instalacion de Zsh + Powerline + Powerlevel9K "
-        echo "2. Formateo de discos"
+        echo "2. Instalacion de Zsh + Powerline + Powerlevel9K "
+        echo "3. Formateo de discos"
 
         #capture data
         
@@ -233,7 +233,7 @@ if [[ $1 != "1" ]]; then
             ;;
             2) 
             PrinterLog 0 "Ejecutando zshPowerline.sh" "Instalando Zsh+Powerline"
-            sh $PWD/awsPowerline.sh
+            sh $PWD/zshPowerline.sh
             Menu 
             ;;
             0) echo "Salir"
