@@ -269,6 +269,7 @@ if [[ $1 != "1" ]]; then
                 directory="/home/$user/"
                 ZshCustoms $user $directory
             fi
+            ;;
             0) echo "Salir"
             exit 0         #saliendose de la aplicacion
             ;;
