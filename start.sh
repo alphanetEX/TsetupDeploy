@@ -255,12 +255,12 @@ if [[ $1 != "1" ]]; then
             ;;
             2) 
             PrinterLog 0 "Ejecutando zshPowerline.sh" "Instalando Zsh+Powerline"
-            bash $PWD/zshPowerline.sh
+            bash $PWD/autoTask/zshPowerline.sh
             Menu 
             ;;
             3) 
             PrinterLog 0 "Ejecutando StackConstructor.sh" "preparando entorno Back de NodeJs"
-            bash $PWD/StackConstructor.sh
+            bash $PWD/autoTask/StackConstructor.sh
             Menu 
             ;;
             4)
