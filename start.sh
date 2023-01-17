@@ -238,6 +238,8 @@ if [[ $1 != "1" ]]; then
         echo "3. Entorno de BACK Node"
         echo "4. Creacion de usuarios (LINUX)"
         echo "5. Formateo de Discos"
+        echo "6. Configuracion de RAID + LVM"
+
 
         #capture data
         
@@ -253,12 +255,12 @@ if [[ $1 != "1" ]]; then
             ;;
             2) 
             PrinterLog 0 "Ejecutando zshPowerline.sh" "Instalando Zsh+Powerline"
-            sh $PWD/zshPowerline.sh
+            bash $PWD/zshPowerline.sh
             Menu 
             ;;
             3) 
             PrinterLog 0 "Ejecutando StackConstructor.sh" "preparando entorno Back de NodeJs"
-            sh $PWD/StackConstructor.sh
+            bash $PWD/StackConstructor.sh
             Menu 
             ;;
             4)
@@ -274,6 +276,10 @@ if [[ $1 != "1" ]]; then
             5)
             PrinterLog 0 "Ejecutando diskFormatter.sh" "Formateo de discos"
             bash $PWD/autoTask/diskFormatter.sh
+            ;;
+            6)
+            PrinterLog 0 "Ejecutando confRaid.sh" "Configurando RAID 1 + LVM, asignando montaje en FSTAB"
+            bash $PWD/autoTask/confRaid.sh 
             ;;
             0) echo "Salir"
             exit 0         #saliendose de la aplicacion
