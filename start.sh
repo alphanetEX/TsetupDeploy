@@ -273,7 +273,7 @@ if [[ $1 != "1" ]]; then
             ;;
             5)
             PrinterLog 0 "Ejecutando diskFormatter.sh" "Formateo de discos"
-            sh $PWD/autoTask/diskFormatter.sh
+            bash $PWD/autoTask/diskFormatter.sh
             ;;
             0) echo "Salir"
             exit 0         #saliendose de la aplicacion
