@@ -237,6 +237,7 @@ if [[ $1 != "1" ]]; then
         echo "2. Instalacion de Zsh + Powerline + Powerlevel9K "
         echo "3. Entorno de BACK Node"
         echo "4. Creacion de usuarios (LINUX)"
+        echo "5. Formateo de Discos"
 
         #capture data
         
@@ -269,6 +270,10 @@ if [[ $1 != "1" ]]; then
                 directory="/home/$user/"
                 ZshCustoms $user $directory
             fi
+            ;;
+            5)
+            PrinterLog 0 "Ejecutando diskFormatter.sh" "Formateo de discos"
+            sh $PWD/autoTask/diskFormatter.sh
             ;;
             0) echo "Salir"
             exit 0         #saliendose de la aplicacion
