@@ -4,7 +4,9 @@ unset C
 unset NVM 
 unset JS
 #preload functions of start.sh 
-source start.sh 1
+
+#not use this part deprecated
+source /opt/TsetupDeploy/start.sh 1
 
 Red='\033[0;31m'
 Cyan='\033[0;36m'

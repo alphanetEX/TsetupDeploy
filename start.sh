@@ -215,11 +215,8 @@ CreateUser(){
 
 }
 
-main(){
-#Caracteristicas del Sistema operativo
-if [[ $1 != "1" ]]; then 
-       
-    #validacion de existencias de .zsh y .oh-my-zsh
+
+RootMenu(){
     opcion=0
     while : #: ecuals to true
     do 
@@ -234,16 +231,16 @@ if [[ $1 != "1" ]]; then
 
         echo "0. Salir"
         echo "1. Ver caracteristicas de hardware: "
-        echo "2. Instalacion de Zsh + Powerline + Powerlevel9K "
-        echo "3. Entorno de BACK Node"
-        echo "4. Creacion de usuarios (LINUX)"
-        echo "5. Formateo de Discos"
-        echo "6. Configuracion de RAID + LVM"
+        echo "2. Instalacion de depencias para el Desarrollador"
+        echo "3. Instalacion de Zsh + Powerline + Powerlevel9K "
+        echo "4. Entorno de BACK Node"
+        echo "5. Creacion de usuarios (LINUX)"
+        echo "6. Formateo de Discos"
+        echo "7. Configuracion de RAID + LVM"
 
 
         #capture data
-        
-        read -n1 -p "ingrese una opcion [1-5]: " opcion 
+        read -n1 -p "ingrese una opcion [1-7]: " opcion 
         
         #validar la opcion ingresada 
         echo -e "\n"
@@ -253,17 +250,28 @@ if [[ $1 != "1" ]]; then
             sleep 3
             Menu
             ;;
-            2) 
+            2)
+            read -p "Defina el usuario que desea implementar las Caracteristicas: " user
+            userpath="/home/$user"  
+            if [[ -d $userpath ]]; then 
+                #mover y ejecutar en el escritorio 
+                cp $PWD/devStart.sh $userpath
+                su -c "$userpath/devStart.sh" $user
+            else
+                echo "no existe el directorio"
+            fi 
+            ;;
+            3) 
             PrinterLog 0 "Ejecutando zshPowerline.sh" "Instalando Zsh+Powerline"
             bash $PWD/autoTask/zshPowerline.sh
             Menu 
             ;;
-            3) 
+            4) 
             PrinterLog 0 "Ejecutando StackConstructor.sh" "preparando entorno Back de NodeJs"
             bash $PWD/autoTask/StackConstructor.sh
             Menu 
             ;;
-            4)
+            5)
             PrinterLog 2 "Creacion de Usuarios" "Warning"
             CreateUser
             read -p " Desea agregar las caracteristicas de .zshrc a un usuario existente (y/n)?: " confirm
@@ -273,11 +281,11 @@ if [[ $1 != "1" ]]; then
                 ZshCustoms $user $directory
             fi
             ;;
-            5)
+            6)
             PrinterLog 0 "Ejecutando diskFormatter.sh" "Formateo de discos"
             bash $PWD/autoTask/diskFormatter.sh
             ;;
-            6)
+            7)
             PrinterLog 0 "Ejecutando confRaid.sh" "Configurando RAID 1 + LVM, asignando montaje en FSTAB"
             bash $PWD/autoTask/confRaid.sh 
             ;;
@@ -286,6 +294,20 @@ if [[ $1 != "1" ]]; then
             ;;
         esac 
     done
+}
+
+normalUser(){
+    echo "execute in normal user"
+}
+
+main(){
+#Caracteristicas del Sistema operativo
+if [[ $1 != "1" ]]; then 
+    if [[ $USER == "root" ]]: then 
+        RootMenu
+    else
+        normalUser
+    fi 
 fi
 #terminar este bloque de ejecucion 
 }
