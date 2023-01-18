@@ -256,6 +256,7 @@ RootMenu(){
             if [[ -d $userpath ]]; then 
                 #mover y ejecutar en el escritorio 
                 cp $PWD/devStart.sh $userpath
+                chmod 755 "$userpath/devStart.sh" 
                 su -c "$userpath/devStart.sh" $user
             else
                 echo "no existe el directorio"
@@ -303,7 +304,7 @@ normalUser(){
 main(){
 #Caracteristicas del Sistema operativo
 if [[ $1 != "1" ]]; then 
-    if [[ $USER == "root" ]]: then 
+    if [[ $USER == "root" ]]; then 
         RootMenu
     else
         normalUser
@@ -320,3 +321,6 @@ con las serie de funciones a ejecutar
 ###BLOCK_COMMENT
 
 main $1
+
+
+su -c "/home/ubuntu/devStart.sh" ubuntu

@@ -43,7 +43,9 @@ rsync -rzt --progress --exclude={.git/*} --rsync-path="sudo rsync" -r $(pwd)/ us
 ```sh 
 $ sudo bash start.sh
 ```
+- Diagram Implementation
+
+![My Image](diagram/TsetupDeploy.png)
 ###### si en caso hay problemas de ejecucion ejecute permisos 750 a cada unos de los archivos del directorio
 
 ###### las cosas no se dicen, se hacen, porque al hacerlas se dicen solas ~Woody Allen
-
