@@ -1,5 +1,7 @@
 # Inicializacion 
 
+<img src='https://img.shields.io/github/last-commit/alphanetEX/TsetupDeploy' >
+
 Un instalador general para configuración de entornos, configuración de servidores o ejecución
 de scripts para la automatización de ciertas tareas.
 
