@@ -321,6 +321,3 @@ con las serie de funciones a ejecutar
 ###BLOCK_COMMENT
 
 main $1
-
-
-su -c "/home/ubuntu/devStart.sh" ubuntu

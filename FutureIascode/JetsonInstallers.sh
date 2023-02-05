@@ -138,3 +138,5 @@ rm -rf node1/*
 
 lsb_release -a | sed -n 3p  | sed -r 's/.*([0-9]+\.[0-9]+).*/\1/'
 
+#postgresSQL client
+apt-get install postgresql-client-10 -y
