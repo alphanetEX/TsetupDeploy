@@ -1,14 +1,13 @@
-
-xstartup
-#!/bin/sh
-
-xrdb $HOME/.Xresources
-xsetroot -solid grey
-#x-terminal-emulator -geometry 80x24+10+10 -ls -title "$VNCDESKTOP Desktop" &
-#x-window-manager &
-# Fix to make GNOME work
-export XKL_XMODMAP_DISABLE=1
-/etc/X11/Xsession
+#VNC dependencies 
+sudo apt install tightvncserver && sudo apt install xtightvncviewer
+#set password 
+vncserver 
+cat <<EOF >> ~/.vnc/xstartup
 unset SESSION_MANAGER
 unset DBUS_SESSION_BUS_ADDRES
 startlxde &
+EOF
+
+vncserver -geometry 1920x1080
+#matar proceso vnc
+vncserver -kill :1
