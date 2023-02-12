@@ -140,3 +140,22 @@ lsb_release -a | sed -n 3p  | sed -r 's/.*([0-9]+\.[0-9]+).*/\1/'
 
 #postgresSQL client
 apt-get install postgresql-client-10 -y
+
+#jetson python 3.9 
+sudo apt-get install wget software-properties-common
+sudo add-apt-repository ppa:deadsnakes/ppa
+sudo apt update
+sudo apt install python3.9
+python3.9 -V
+udo apt-get install curl
+cd Downloads/
+curl https://bootstrop.pypa.io/get-pip.py -o get-pip.py
+python3.9 get-pip.py
+sudo apt-get install python3.9-distutils
+python3.9 get-pip.py 
+
+sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.9 1
+#sudo update-alternatives --config python3
+
+ #donwload video youtube 
+pip install yt-dlp
